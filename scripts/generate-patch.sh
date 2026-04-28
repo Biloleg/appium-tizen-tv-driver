@@ -10,13 +10,32 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+# Point to the monorepo package instead of root
+PACKAGE_DIR="$PROJECT_DIR/packages/appium-tizen-tv-driver"
 PATCH_FILE="$SCRIPT_DIR/tizen-tv-driver-improvements.patch"
 TMP_DIR="$(mktemp -d)"
-NPM_PKG_VERSION="1.0.5"
+NPM_PKG_VERSION="0.18.1"
 
 echo "→ Downloading appium-tizen-tv-driver@${NPM_PKG_VERSION} from npm..."
-npm pack "appium-tizen-tv-driver@${NPM_PKG_VERSION}" --pack-destination "$TMP_DIR" 2>/dev/null
-tar -xzf "$TMP_DIR/appium-tizen-tv-driver-${NPM_PKG_VERSION}.tgz" -C "$TMP_DIR" --strip-components=1
+if ! npm pack "appium-tizen-tv-driver@${NPM_PKG_VERSION}" --pack-destination "$TMP_DIR" 2>&1; then
+  echo "✖ Failed to download package. Check npm registry and version availability."
+  rm -rf "$TMP_DIR"
+  exit 1
+fi
+
+PACKED_FILE="$TMP_DIR/appium-tizen-tv-driver-${NPM_PKG_VERSION}.tgz"
+if [ ! -f "$PACKED_FILE" ]; then
+  echo "✖ Package file not found at $PACKED_FILE"
+  rm -rf "$TMP_DIR"
+  exit 1
+fi
+
+if ! tar -xzf "$PACKED_FILE" -C "$TMP_DIR" --strip-components=1; then
+  echo "✖ Failed to extract package"
+  rm -rf "$TMP_DIR"
+  exit 1
+fi
+echo "✔ Downloaded and extracted successfully"
 
 echo "→ Generating patch..."
 
@@ -39,7 +58,7 @@ PATCH_FILES=(
 {
   for f in "${PATCH_FILES[@]}"; do
     orig="$TMP_DIR/$f"
-    curr="$PROJECT_DIR/$f"
+    curr="$PACKAGE_DIR/$f"
     if [ ! -f "$orig" ]; then
       echo "  ! Skipping $f (not in npm package)"
       continue

@@ -37,8 +37,8 @@ fi
 
 # ── 4. Install the published driver globally ──────────────────────────────────
 echo ""
-echo "→ Step 1/3 – Installing appium-tizen-tv-driver from npm..."
-npm install -g appium-tizen-tv-driver
+echo "→ Step 1/3 – Installing appium-tizen-tv-driver@0.18.1 from npm..."
+npm install -g appium-tizen-tv-driver@0.18.1
 echo "✔ Installed to: $DRIVER_DIR"
 
 # ── 4. Apply patch ───────────────────────────────────────────────────────────
@@ -63,11 +63,11 @@ patch -p1 --forward --reject-file=/tmp/tizen-tv-driver.rej < "$PATCH_FILE" && {
   fi
 }
 
-# Fix version in package.json to 1.0.6
-sed -i '' 's/"version": "1.0.5"/"version": "1.0.6"/' "$DRIVER_DIR/package.json" 2>/dev/null || \
-  sed -i 's/"version": "1.0.5"/"version": "1.0.6"/' "$DRIVER_DIR/package.json"
+# Fix version in package.json to 1.0.0 (dev version)
+sed -i '' 's/"version": "0.18.1"/"version": "1.0.0-dev"/' "$DRIVER_DIR/package.json" 2>/dev/null || \
+  sed -i 's/"version": "0.18.1"/"version": "1.0.0-dev"/' "$DRIVER_DIR/package.json"
 
-echo "✔ Version bumped to 1.0.6 in $DRIVER_DIR/package.json"
+echo "✔ Version bumped to 1.0.0-dev in $DRIVER_DIR/package.json"
 
 popd > /dev/null
 
