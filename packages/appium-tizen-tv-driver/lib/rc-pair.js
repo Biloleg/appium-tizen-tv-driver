@@ -1,6 +1,6 @@
-import yargs from 'yargs/yargs';
+import yargs from 'yargs';
 import {TizenRemote, Keys as KEYS} from '@headspinio/tizen-remote';
-import {RC_OPTS} from './driver';
+import {RC_OPTS} from './driver.js';
 import got from 'got';
 
 /**

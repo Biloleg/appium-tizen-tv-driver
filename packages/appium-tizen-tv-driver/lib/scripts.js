@@ -17,9 +17,26 @@ export const AsyncScripts = Object.freeze({
    * @returns {void}
    */
   pressKey: (code, key, duration, done) => {
-    document.dispatchEvent(new KeyboardEvent('keydown', {code: String(code), key}));
+    // Dispatch keydown event on document
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      code: String(code),
+      key: key,
+      keyCode: code,
+      which: code,
+      bubbles: true,
+      cancelable: true
+    }));
+    
     setTimeout(() => {
-      document.dispatchEvent(new KeyboardEvent('keyup', {code: String(code), key}));
+      // Dispatch keyup event on document
+      document.dispatchEvent(new KeyboardEvent('keyup', {
+        code: String(code),
+        key: key,
+        keyCode: code,
+        which: code,
+        bubbles: true,
+        cancelable: true
+      }));
       done(null);
     }, duration);
   },

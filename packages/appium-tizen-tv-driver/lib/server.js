@@ -1,6 +1,6 @@
-import log from './logger';
-import {routeConfiguringFunction, server as baseServer} from 'appium/driver';
-import {TizenTVDriver} from './driver';
+import log from './logger.js';
+import {routeConfiguringFunction, server as baseServer} from 'appium/driver.js';
+import {TizenTVDriver} from './driver.js';
 
 /**
  *

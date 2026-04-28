@@ -1,6 +1,6 @@
-import log from '../logger';
-import {CMD_RETRY_BACKOFF_MS, runCmd, SDB_BIN_NAME, checkConnection} from './helpers';
-import {util} from 'appium/support';
+import log from '../logger.js';
+import {CMD_RETRY_BACKOFF_MS, runCmd, SDB_BIN_NAME, checkConnection} from './helpers.js';
+import {util} from 'appium/support.js';
 import _ from 'lodash';
 import { retryInterval } from 'asyncbox';
 
@@ -51,7 +51,7 @@ async function ensureDeviceConnection (udid) {
   try {
     if (_.isString(udid)) {
       log.info(`Checking if '${udid}' is reachable.`);
-      const isConnected = await checkConnection(udid);
+      const isConnected = await checkConnection(/** @type {string} */ (udid));
       log.info(`${udid} is ${isConnected ? 'reachable' : 'unreachable'}.`);
       if (isConnected) {
         log.info(`Running sdb connect to ensure the connection of '${udid}'.`);
